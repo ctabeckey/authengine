@@ -9,4 +9,5 @@ import llc.nanocontext.authengine.exceptions.FieldParseException;
  */
 public interface FieldParser<T> {
     FieldParserResult<T> parse(final String raw, final int offset) throws FieldParseException;
+    String format(T value);
 }

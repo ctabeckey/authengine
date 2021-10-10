@@ -23,4 +23,9 @@ public class NullFieldParser implements FieldParser<NullType> {
             return 0;
         }
     }
+
+    public String format(final NullType value) {
+        return "";
+    }
+
 }

@@ -1,9 +1,7 @@
 package llc.nanocontext.authengine.message.ISO8583.V1987;
 
-import llc.nanocontext.authengine.message.AuthorizationRequest;
-import llc.nanocontext.authengine.message.AuthorizationResponse;
-import llc.nanocontext.authengine.message.Message;
-import llc.nanocontext.authengine.message.MessageTypeIndicator;
+import llc.nanocontext.authengine.message.*;
+import llc.nanocontext.authengine.parser.*;
 
 import java.time.LocalDate;
 
@@ -43,5 +41,40 @@ public class ISO8583_V1987_AuthorizationRequestMessage
                 .withZipCode(getZipCode())
                 .withResponseCode(responseCode)
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return "ISO8583_V1987_AuthorizationRequestMessage{} [" + format() + "]";
+    }
+
+    public String format() {
+        StringBuilder dataFieldsSB = new StringBuilder();
+        int primaryFieldBitmap = 0x0000;
+
+        if (getPan() != null) {
+            dataFieldsSB.append((new LLVarFieldParser().format(getPan())));
+            primaryFieldBitmap = PrimaryBitmapFields.sum(primaryFieldBitmap, PrimaryBitmapFields.PAN);
+        }
+
+        if (getAmountRaw() != null) {
+            dataFieldsSB.append((new NumericFieldParser(0).format(getAmountRaw())));
+        }
+
+        if (getCardholderName() != null) {
+            dataFieldsSB.append((new LLVarFieldParser().format(getCardholderName())));
+        }
+
+        if (getExpirationDate() != null) {
+            dataFieldsSB.append((new ExpirationDateFieldParser()).format(getExpirationDate()));
+        }
+
+        if (getZipCode() != null) {
+            dataFieldsSB.append((new ZipCodeFieldParser()).format(getZipCode()));
+        }
+
+        return getMessageTypeIndicator().format()
+                + PrimaryBitmapFields.format(primaryFieldBitmap)
+                + dataFieldsSB;
     }
 }

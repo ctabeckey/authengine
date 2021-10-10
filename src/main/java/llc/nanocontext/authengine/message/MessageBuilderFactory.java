@@ -1,5 +1,6 @@
 package llc.nanocontext.authengine.message;
 
+import llc.nanocontext.authengine.exceptions.UnknownMessageTypeIdentifierException;
 import llc.nanocontext.authengine.message.ISO8583.V1987.ISO8583_V1987_AuthorizationRequestMessage;
 import llc.nanocontext.authengine.message.ISO8583.V1987.ISO8583_V1987_AuthorizationRequestMessageBuilder;
 import llc.nanocontext.authengine.message.ISO8583.V1987.ISO8583_V1987_AuthorizationResponseMessage;
@@ -35,9 +36,14 @@ public class MessageBuilderFactory {
      * @throws InvocationTargetException
      * @throws InstantiationException
      */
-    public static MessageBuilder getMessageBuilder(final MessageTypeIndicator mti)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static MessageBuilder getMessageBuilder(final MessageTypeIndicator mti) {
         Class<? extends MessageBuilder> builderClass = builderMap.get(mti);
-        return builderClass.getConstructor().newInstance();
+        if (builderClass == null)
+            throw new UnknownMessageTypeIdentifierException(mti);
+        try {
+            return builderClass.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException x) {
+            throw new UnknownMessageTypeIdentifierException(mti, x);
+        }
     }
 }

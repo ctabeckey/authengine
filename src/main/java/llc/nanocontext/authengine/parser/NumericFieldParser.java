@@ -1,5 +1,7 @@
 package llc.nanocontext.authengine.parser;
 
+import llc.nanocontext.authengine.exceptions.NumericFieldParseException;
+
 import java.math.BigInteger;
 
 /**
@@ -8,11 +10,11 @@ import java.math.BigInteger;
  * For example, NUMERIC(6) field with a value of 10, 000010 will be populated into this field.
  */
 public class NumericFieldParser implements FieldParser<Long> {
-    private final int sourceLength;
+    private final int rawLength;
 
     // a default no-arg constructor is required
-    public NumericFieldParser(final int sourceLength) {
-        this.sourceLength = sourceLength;
+    public NumericFieldParser(final int rawLength) {
+        this.rawLength = rawLength;
     }
 
     /**
@@ -20,9 +22,26 @@ public class NumericFieldParser implements FieldParser<Long> {
      * @param raw
      * @return
      */
-    public Result parse(final String raw, final int offset) {
-        final String fieldRaw = raw.substring(offset, offset + sourceLength);
-        return new Result (Long.parseLong(fieldRaw), sourceLength);
+    public Result parse(final String raw, final int offset)
+    throws NumericFieldParseException {
+        final String fieldRaw = raw.substring(offset, offset + rawLength);
+        try {
+            return new Result(Long.parseLong(fieldRaw), rawLength);
+        } catch (NumberFormatException nfX) {
+            throw new NumericFieldParseException(raw);
+        }
+    }
+
+    @Override
+    public String format(final Long value) {
+        if (value == null)
+            throw new IllegalArgumentException("value must not be null");
+
+        // if the rawLength is zero then format without left filling
+        final String fieldFormat = rawLength == 0
+                ? "%d"
+                : "%0" + rawLength + "d";
+        return String.format(fieldFormat, value);
     }
 
     /**

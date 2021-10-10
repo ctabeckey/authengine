@@ -59,8 +59,12 @@ public class MessageTypeIndicator {
         return Objects.hash(version, clazz, function, origin);
     }
 
-    public String toString() {
+    public String format() {
         return String.format("%1d%1d%1d%1d", version, clazz, function, origin);
+    }
+
+    public String toString(){
+        return format();
     }
 
     public static Builder builder() {

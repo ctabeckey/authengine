@@ -1,6 +1,5 @@
 package llc.nanocontext.authengine.parser;
 
-import llc.nanocontext.authengine.exceptions.FieldParseException;
 import llc.nanocontext.authengine.exceptions.LLVarFieldParseException;
 
 /**
@@ -46,5 +45,9 @@ public class LLVarFieldParser implements FieldParser<String> {
         public int getLength() {
             return length;
         }
+    }
+
+    public String format(final String value) {
+        return String.format("%02d%s", value.length(), value);
     }
 }

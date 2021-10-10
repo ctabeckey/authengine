@@ -44,12 +44,7 @@ public class BaseMessageParser {
             }
         }
 
-        MessageBuilder builder;
-        try {
-            builder = MessageBuilderFactory.getMessageBuilder(mti);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException x) {
-            throw new MessageParseException(raw, x);
-        }
+        MessageBuilder builder = MessageBuilderFactory.getMessageBuilder(mti);
 
         // iterate through the field types that could be present (i.e. PrimaryBitmapFields)
         // where the primaryBitmap indicates that the field should exist then try to parse it

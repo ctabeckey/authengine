@@ -5,7 +5,10 @@ import llc.nanocontext.authengine.message.AuthorizationResponse;
 import llc.nanocontext.authengine.message.Message;
 import llc.nanocontext.authengine.parser.BaseMessageParser;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 /**
  * A simple, single threaded and synchronous implementation of a message processor.
@@ -16,12 +19,15 @@ import java.lang.reflect.InvocationTargetException;
 public class MessageProcessorImpl {
     private final BaseMessageParser parser;
     private final AuthorizationStrategy authorizationStrategy;
+    private final Validator validator;
 
     public MessageProcessorImpl(
             final BaseMessageParser parser,
-            final AuthorizationStrategy authorizationStrategy) {
+            final AuthorizationStrategy authorizationStrategy,
+            final Validator validator) {
         this.parser = parser;
         this.authorizationStrategy = authorizationStrategy;
+        this.validator = validator;
     }
 
     /**
@@ -33,13 +39,19 @@ public class MessageProcessorImpl {
     public String process(final String message) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         String result = null;
         Message msg = parser.parse(message);
-        if (msg instanceof AuthorizationRequest) {
-            final AuthorizationRequest authRequest = (AuthorizationRequest)msg;
-            AuthorizationResponse response = authorizationStrategy.authorize(authRequest);
 
+        if (msg instanceof AuthorizationRequest) {
+            AuthorizationResponse response = null;
+
+            final AuthorizationRequest authRequest = (AuthorizationRequest) msg;
+            Set<ConstraintViolation<AuthorizationRequest>> constraintViolations = validator.validate(authRequest);
+            if (constraintViolations == null && constraintViolations.isEmpty()) {
+                response = authorizationStrategy.authorize(authRequest);
+            } else {
+                response = authRequest.createResponseMessage(AuthorizationResponse.RESPONSE_ERROR);
+            }
             result = response.toString();
         }
-
         return result;
     }
 }

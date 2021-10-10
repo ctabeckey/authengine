@@ -12,6 +12,17 @@ public class AlphaFieldParser implements FieldParser<String> {
         return new Result(raw.substring(offset, offset + rawLength), rawLength);
     }
 
+    /**
+     * Given a string value, serialize it as an Alpha
+     *
+     * @param value
+     * @return
+     */
+    public final String format(final String value) {
+        final String fieldFormat = "%1$" + rawLength + "s";
+        return String.format(fieldFormat, value);
+    }
+
     public static class Result implements FieldParserResult<String> {
         private final String value;
         private final int length;

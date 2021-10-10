@@ -7,8 +7,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.Objects;
 
-public abstract class ISO8583_V1987_BaseAuthorizationMessage extends ISO8583_V1987_BaseMessage {
+public abstract class ISO8583_V1987_BaseAuthorizationMessage
+extends ISO8583_V1987_BaseMessage {
     @NotNull
     @Pattern(regexp = "[0-9]{13,19}")
     private final String pan;
@@ -62,4 +64,16 @@ public abstract class ISO8583_V1987_BaseAuthorizationMessage extends ISO8583_V19
         return zipCode;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ISO8583_V1987_BaseAuthorizationMessage that = (ISO8583_V1987_BaseAuthorizationMessage) o;
+        return Objects.equals(pan, that.pan) && Objects.equals(expirationDate, that.expirationDate) && Objects.equals(amountRaw, that.amountRaw) && Objects.equals(cardholderName, that.cardholderName) && Objects.equals(zipCode, that.zipCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pan, expirationDate, amountRaw, cardholderName, zipCode);
+    }
 }

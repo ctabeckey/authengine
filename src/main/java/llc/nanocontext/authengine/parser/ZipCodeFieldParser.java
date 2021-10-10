@@ -11,6 +11,14 @@ public class ZipCodeFieldParser implements FieldParser<String> {
         return new Result(raw.substring(offset, offset + rawLength), rawLength);
     }
 
+    @Override
+    public String format(final String value) {
+        if (value == null)
+            throw new IllegalArgumentException("value must not be null");
+
+        return value;
+    }
+
     public static class Result implements FieldParserResult<String> {
         private final String value;
         private final int length;

@@ -31,4 +31,19 @@ public enum PrimaryBitmapFields {
     public FieldParser<?> getFieldParser() {
         return fieldParser;
     }
+
+    /**
+     * Builds a map from an existing map plus a field to add
+     *
+     * @param map
+     * @param field
+     * @return
+     */
+    public static int sum(final int map, PrimaryBitmapFields field) {
+        return map | field.mask;
+    }
+
+    public static String format(final int map) {
+        return String.format("%02x", (map & 0xFF));
+    }
 }
