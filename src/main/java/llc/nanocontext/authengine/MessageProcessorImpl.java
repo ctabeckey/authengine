@@ -16,7 +16,7 @@ import java.util.Set;
  * interface on raw String level. External to this class, the formatting and semantics
  * of messages are unknown.
  */
-public class MessageProcessorImpl {
+public class MessageProcessorImpl implements MessageProcessor{
     private final BaseMessageParser parser;
     private final AuthorizationStrategy authorizationStrategy;
     private final Validator validator;
@@ -36,7 +36,8 @@ public class MessageProcessorImpl {
      * @param message
      * @return
      */
-    public String process(final String message) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    @Override
+    public String process(final String message) {
         String result = null;
         Message msg = parser.parse(message);
 
@@ -45,7 +46,7 @@ public class MessageProcessorImpl {
 
             final AuthorizationRequest authRequest = (AuthorizationRequest) msg;
             Set<ConstraintViolation<AuthorizationRequest>> constraintViolations = validator.validate(authRequest);
-            if (constraintViolations == null && constraintViolations.isEmpty()) {
+            if (constraintViolations == null || constraintViolations.isEmpty()) {
                 response = authorizationStrategy.authorize(authRequest);
             } else {
                 response = authRequest.createResponseMessage(AuthorizationResponse.RESPONSE_ERROR);

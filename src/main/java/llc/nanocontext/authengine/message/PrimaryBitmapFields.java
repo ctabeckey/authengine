@@ -7,14 +7,14 @@ import llc.nanocontext.authengine.parser.*;
  * These MUST be in the order that they are expected in any message.
  */
 public enum PrimaryBitmapFields {
-    PAN(0x0001, new LLVarFieldParser()),
-    ExpirationDate(0x0002, new ExpirationDateFieldParser()),
-    TransactionAmount(0x0004, new NumericFieldParser(10)),
-    ResponseCode(0x0008, new AlphaFieldParser(2)),
-    CardholderName(0x0010, new LLVarFieldParser()),
-    ZipCode(0x0020, new ZipCodeFieldParser()),
-    Unused(0x0040, new NullFieldParser()),
-    AdditionalData(0x0080, new NullFieldParser());
+    PAN(0b10000000, new LLVarFieldParser()),
+    ExpirationDate(0b01000000, new ExpirationDateFieldParser()),
+    TransactionAmount(0b00100000, new NumericFieldParser(10)),
+    ResponseCode(0b00010000, new AlphaFieldParser(2)),
+    CardholderName(0b00001000, new LLVarFieldParser()),
+    ZipCode(0b00000100, new ZipCodeFieldParser()),
+    Unused(0b00000010, new NullFieldParser()),
+    AdditionalData(0b00000001, new NullFieldParser());
 
     private final int mask;
     private final FieldParser<?> fieldParser;

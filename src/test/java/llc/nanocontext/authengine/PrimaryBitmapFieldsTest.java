@@ -10,11 +10,11 @@ public class PrimaryBitmapFieldsTest {
     @DataProvider
     public Object[][] testSumDataProvider() {
         return new Object[][] {
-                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN}, "01"},
-                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN, PrimaryBitmapFields.CardholderName}, "11"},
-                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN, PrimaryBitmapFields.ExpirationDate}, "03"},
-                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN, PrimaryBitmapFields.TransactionAmount}, "05"},
-                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN, PrimaryBitmapFields.ExpirationDate, PrimaryBitmapFields.TransactionAmount}, "07"},
+                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN}, "80"},
+                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN, PrimaryBitmapFields.CardholderName}, "88"},
+                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN, PrimaryBitmapFields.ExpirationDate}, "c0"},
+                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN, PrimaryBitmapFields.TransactionAmount}, "a0"},
+                {new PrimaryBitmapFields[]{PrimaryBitmapFields.PAN, PrimaryBitmapFields.ExpirationDate, PrimaryBitmapFields.TransactionAmount}, "e0"},
         };
     }
 

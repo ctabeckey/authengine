@@ -24,7 +24,8 @@ public class LLVarFieldParser implements FieldParser<String> {
         }
         String value = raw.substring(offset + 2, offset + 2 + length);
 
-        return new Result(value, length);
+        // the length of the data plus 2 characters for the length
+        return new Result(value, length+2);
     }
 
     public static class Result implements FieldParserResult<String> {

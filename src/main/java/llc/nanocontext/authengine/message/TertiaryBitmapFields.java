@@ -1,7 +1,9 @@
 package llc.nanocontext.authengine.message;
 
+import llc.nanocontext.authengine.parser.NullFieldParser;
+
 public enum TertiaryBitmapFields {
-    AdditionalData(0x0080);
+    AdditionalData(0b00000001);
 
     private final int mask;
 
