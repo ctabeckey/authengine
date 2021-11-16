@@ -29,10 +29,8 @@ public class NaiveAuthorizationStrategy implements AuthorizationStrategy {
 
         AuthorizationResponse response = null;
 
-        if (request.getExpirationDate().isAfter(LocalDate.now())
-                && ((request.getZipCode() == null && request.getAmountRaw() < MAX_WITHOUT_ZIPCODE)
-                || (request.getZipCode() != null && request.getAmountRaw() < MAX_WITH_ZIPCODE))
-        ) {
+        boolean rulesAuth = runRules(request);
+        if (rulesAuth) {
             // success, the transaction MUST be authorized
             response = request.createResponseMessage(AuthorizationResponse.RESPONSE_OK);
 
@@ -42,5 +40,14 @@ public class NaiveAuthorizationStrategy implements AuthorizationStrategy {
         }
 
         return response;
+    }
+
+    protected boolean runRules(final AuthorizationRequest request) {
+        if (request == null)
+            throw new IllegalArgumentException("'request' MUST NOT be null, ignoring");
+
+        return request.getExpirationDate().isAfter(LocalDate.now())
+                && ((request.getZipCode() == null && request.getAmountRaw() < MAX_WITHOUT_ZIPCODE)
+                || (request.getZipCode() != null && request.getAmountRaw() < MAX_WITH_ZIPCODE));
     }
 }
